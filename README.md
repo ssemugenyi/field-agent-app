@@ -1,6 +1,6 @@
 # Nyumban Field Agent App
 
-An offline-first Expo / React Native app for field agents to browse assigned properties and record inspections. Built to keep working through flaky connectivity: every read and write goes through a local SQLite mirror first, with a background sync engine reconciling against the Nyumban Field API when a connection is available.
+An offline-first Expo / React Native app for field agents to browse assigned properties and record inspections. Built to keep working through flaky connectivity: every read and write goes through a local SQLite mirror first, with a background sync engine reconciling against the backend API when a connection is available.
 
 ## Stack
 
@@ -14,7 +14,7 @@ An offline-first Expo / React Native app for field agents to browse assigned pro
 
 ```bash
 npm install
-cp .env.example .env   # then fill in EXPO_PUBLIC_ASSESSMENT_KEY
+cp .env.example .env   # then fill in the required API key
 npx expo start
 ```
 
@@ -24,7 +24,7 @@ Scan the QR code with Expo Go (SDK 54 build), or press `a` / `i` to open an emul
 
 | Variable | Description |
 |---|---|
-| `EXPO_PUBLIC_ASSESSMENT_KEY` | Per-candidate key sent as `X-Assessment-Key` on every API request. Issued once; never commit it — `.env` is gitignored. |
+| `EXPO_PUBLIC_ASSESSMENT_KEY` | API access key sent as `X-Assessment-Key` on every request. Never commit it — `.env` is gitignored. |
 
 ## Architecture
 
