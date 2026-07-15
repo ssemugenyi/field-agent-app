@@ -7,7 +7,6 @@ import { setAuthenticated } from '../auth/authSlice';
 import { useAppDispatch } from '../store/hooks';
 import { Button, Card, Input, Text } from '../components';
 import { colors } from '../theme/colors';
-import { radius } from '../theme/radius';
 import { space } from '../theme/spacing';
 
 export default function LoginScreen() {
@@ -49,7 +48,7 @@ export default function LoginScreen() {
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.content}>
         <View style={styles.brand}>
-          <Image source={require('../../assets/icon.png')} style={styles.logo} contentFit="cover" />
+          <Image source={require('../../assets/images/nyumban-logo.png')} style={styles.logo} contentFit="contain" />
           <Text size="3xl" weight="extrabold" style={styles.title}>
             Nyumban
           </Text>
@@ -110,9 +109,8 @@ const styles = StyleSheet.create({
     marginBottom: space.xl,
   },
   logo: {
-    width: 72,
-    height: 72,
-    borderRadius: radius.xl,
+    width: 120,
+    height: 120,
     marginBottom: space.md,
   },
   title: {

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "field-agent-app",
+    "name": "Agent App",
     "slug": "field-agent-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,7 +16,12 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.fieldagentapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,7 +35,8 @@
           "cameraPermission": "Nyumban needs camera access so you can attach photo evidence to inspections.",
           "photosPermission": "Nyumban needs photo library access so you can attach existing photos to inspections."
         }
-      ]
+      ],
+      "expo-font"
     ]
   }
 }
