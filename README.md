@@ -2,6 +2,14 @@
 
 An offline-first Expo / React Native app for field agents to browse assigned properties and record inspections. Built to keep working through flaky connectivity: every read and write goes through a local SQLite mirror first, with a background sync engine reconciling against the backend API when a connection is available.
 
+## Features
+
+- **Browse properties** — searchable, filterable by region and status, backed by a local mirror so the list works offline.
+- **Room-by-room inspections** — for each room, record a condition (`Good` / `Fair` / `Poor` / `Needs repair`), free-text notes, and photos (camera or library).
+- **Drafts autosave locally** — every change lands in SQLite immediately, so a killed app or lost connection never loses progress; resume a draft from the property's detail screen.
+- **My Inspections** — see every inspection's status at a glance (`Draft` → `Queued` → `Uploading photos` → `Submitting` → `Synced`, or `Needs attention` on failure/conflict).
+- **Conflict handling** — if a property changed on the server since the inspection was started, the sync engine surfaces it as `Needs attention` instead of silently overwriting.
+
 ## Stack
 
 - [Expo SDK 54](https://docs.expo.dev/versions/v54.0.0/) / React Native 0.81
