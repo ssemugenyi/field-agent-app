@@ -38,16 +38,16 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.borderMuted,
   },
   tab: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: space.sm,
+    paddingVertical: space.sm + 2,
   },
   indicator: {
     marginTop: space.xs,
-    height: 2,
+    height: 3,
     width: '60%',
     borderRadius: 999,
     backgroundColor: 'transparent',

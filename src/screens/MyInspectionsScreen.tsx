@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, RefreshControl, StyleSheet, View } from 'react-native';
+import Feather from '@expo/vector-icons/Feather';
 import { FlashList } from '@shopify/flash-list';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -7,7 +8,7 @@ import { listAll } from '../db/inspections.repo';
 import { getProperty } from '../db/properties.repo';
 import { kickSync } from '../sync/syncEngine';
 import { useAppSelector } from '../store/hooks';
-import { Badge, Text } from '../components';
+import { Badge, Card, Text } from '../components';
 import { colors } from '../theme/colors';
 import { space } from '../theme/spacing';
 import type { InspectionDraft, InspectionStatus } from '../types/domain';
@@ -31,16 +32,21 @@ const STATUS_META: Record<InspectionStatus, { label: string; variant: 'neutral' 
 function InspectionRow({ row, onPress }: { row: Row; onPress: () => void }) {
   const meta = STATUS_META[row.draft.status];
   return (
-    <Pressable onPress={onPress} style={styles.row}>
-      <View style={styles.rowHeader}>
-        <Text size="base" weight="semibold" style={styles.rowTitle} numberOfLines={1}>
-          {row.propertyName}
-        </Text>
-        <Badge label={meta.label} variant={meta.variant} />
-      </View>
-      <Text size="xs" color="textMuted">
-        Updated {new Date(row.draft.updatedAt).toLocaleString()}
-      </Text>
+    <Pressable onPress={onPress}>
+      <Card style={styles.row}>
+        <View style={styles.rowHeader}>
+          <Text size="base" weight="semibold" style={styles.rowTitle} numberOfLines={1}>
+            {row.propertyName}
+          </Text>
+          <Badge label={meta.label} variant={meta.variant} />
+        </View>
+        <View style={styles.rowFooter}>
+          <Text size="xs" color="textMuted">
+            Updated {new Date(row.draft.updatedAt).toLocaleString()}
+          </Text>
+          <Feather name="chevron-right" size={18} color={colors.textMuted} />
+        </View>
+      </Card>
     </Pressable>
   );
 }
@@ -113,11 +119,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   listContent: {
+    padding: space.md,
     paddingBottom: space.xl,
   },
+  separator: {
+    height: space.sm,
+  },
   row: {
-    paddingHorizontal: space.md,
-    paddingVertical: space.sm,
+    gap: space.xs,
   },
   rowHeader: {
     flexDirection: 'row',
@@ -128,10 +137,10 @@ const styles = StyleSheet.create({
   rowTitle: {
     flex: 1,
   },
-  separator: {
-    height: 1,
-    backgroundColor: colors.borderMuted,
-    marginLeft: space.md,
+  rowFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   empty: {
     padding: space.xl,

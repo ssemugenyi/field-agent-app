@@ -13,6 +13,7 @@ const shadow = (offsetY: number, opacity: number, radius: number, elevation: num
 
 export const shadows = {
   none: {},
-  md: shadow(3, 0.12, 3, 3),
-  lg: shadow(4, 0.15, 4, 6),
+  sm: shadow(1, 0.06, 4, 2),
+  md: shadow(4, 0.08, 14, 5),
+  lg: shadow(10, 0.14, 28, 12),
 } as const;

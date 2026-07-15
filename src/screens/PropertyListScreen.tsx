@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import Feather from '@expo/vector-icons/Feather';
 import { FlashList } from '@shopify/flash-list';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { searchProperties } from '../db/properties.repo';
 import { useAppSelector } from '../store/hooks';
-import { Badge, Input, Text } from '../components';
+import { Badge, Card, Input, Text } from '../components';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
 import { space } from '../theme/spacing';
@@ -51,26 +52,31 @@ function Chip({ label, selected, onPress }: { label: string; selected: boolean; 
 
 function PropertyRow({ property, onPress }: { property: Property; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} style={styles.row}>
-      <View style={styles.rowHeader}>
-        <Text size="base" weight="semibold" style={styles.rowTitle} numberOfLines={1}>
-          {property.name}
+    <Pressable onPress={onPress}>
+      <Card style={styles.row}>
+        <View style={styles.rowHeader}>
+          <Text size="base" weight="semibold" style={styles.rowTitle} numberOfLines={1}>
+            {property.name}
+          </Text>
+          <Badge label={property.status.replace('_', ' ')} variant={statusVariant(property.status)} />
+        </View>
+        <Text size="sm" color="textMuted" numberOfLines={1}>
+          {property.address ?? 'No address on file'}
         </Text>
-        <Badge label={property.status.replace('_', ' ')} variant={statusVariant(property.status)} />
-      </View>
-      <Text size="sm" color="textMuted" numberOfLines={1}>
-        {property.address ?? 'No address on file'}
-      </Text>
-      <View style={styles.rowFooter}>
-        <Text size="xs" color="textMuted">
-          {property.unitCount != null ? `${property.unitCount} units` : 'Unit count unknown'} · {property.region}
-        </Text>
-        <Text size="xs" color="textMuted">
-          {property.lastInspectedAt
-            ? `Last inspected ${new Date(property.lastInspectedAt).toLocaleDateString()}`
-            : 'Never inspected'}
-        </Text>
-      </View>
+        <View style={styles.rowFooter}>
+          <View style={styles.rowFooterText}>
+            <Text size="xs" color="textMuted">
+              {property.unitCount != null ? `${property.unitCount} units` : 'Unit count unknown'} · {property.region}
+            </Text>
+            <Text size="xs" color="textMuted">
+              {property.lastInspectedAt
+                ? `Last inspected ${new Date(property.lastInspectedAt).toLocaleDateString()}`
+                : 'Never inspected'}
+            </Text>
+          </View>
+          <Feather name="chevron-right" size={18} color={colors.textMuted} />
+        </View>
+      </Card>
     </Pressable>
   );
 }
@@ -114,7 +120,7 @@ export default function PropertyListScreen() {
   return (
     <View style={styles.screen}>
       <View style={styles.searchArea}>
-        <Input placeholder="Search by name or address" value={searchText} onChangeText={setSearchText} />
+        <Input placeholder="Search by name or address" value={searchText} onChangeText={setSearchText} style={styles.searchInput} />
         <View style={styles.chipRow}>
           {REGIONS.map((r) => (
             <Chip key={r.label} label={r.label} selected={region === r.value} onPress={() => setRegion(r.value)} />
@@ -162,18 +168,22 @@ const styles = StyleSheet.create({
   searchArea: {
     padding: space.md,
     paddingBottom: space.sm,
+    backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.borderMuted,
+  },
+  searchInput: {
+    marginBottom: 0,
   },
   chipRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: space.xs,
-    marginTop: space.xs,
+    marginTop: space.sm,
   },
   chip: {
     paddingVertical: space.xs / 1.5,
-    paddingHorizontal: space.sm,
+    paddingHorizontal: space.sm + 2,
     borderRadius: radius.full,
     backgroundColor: colors.borderMuted,
   },
@@ -181,14 +191,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.secondary,
   },
   progress: {
-    marginTop: space.xs,
+    marginTop: space.sm,
   },
   listContent: {
+    padding: space.md,
     paddingBottom: space.xl,
   },
+  separator: {
+    height: space.sm,
+  },
   row: {
-    paddingHorizontal: space.md,
-    paddingVertical: space.sm,
+    gap: space.xs,
   },
   rowHeader: {
     flexDirection: 'row',
@@ -202,12 +215,13 @@ const styles = StyleSheet.create({
   rowFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: space.xs,
+    gap: space.sm,
   },
-  separator: {
-    height: 1,
-    backgroundColor: colors.borderMuted,
-    marginLeft: space.md,
+  rowFooterText: {
+    flex: 1,
+    gap: 2,
   },
   empty: {
     padding: space.xl,

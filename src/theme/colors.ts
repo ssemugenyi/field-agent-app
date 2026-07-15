@@ -77,11 +77,13 @@ export const colors = {
   primary: brand.vividOrange,
   primaryDark: brand.orangeDark,
   primaryMuted: palette.orange50,
+  primarySoft: palette.orange100,
 
   secondary: brand.navyBlue,
   secondaryMuted: brand.gunmetal,
+  secondarySoft: palette.slate200,
 
-  background: palette.white,
+  background: palette.gray100,
   surface: palette.white,
   surfaceDark: brand.charcoalBlack,
 
@@ -92,13 +94,13 @@ export const colors = {
   textMuted: brand.slateGray,
   textInverse: palette.white,
 
-  success: brand.successGreen,
-  successBg: palette.green300,
-  warning: brand.warningYellow,
-  warningBg: palette.yellow200,
+  success: '#15803D',
+  successBg: '#DCFCE7',
+  warning: '#B45309',
+  warningBg: '#FEF3C7',
   error: brand.errorRed,
   errorBg: palette.rose50,
-  info: palette.blue500,
+  info: palette.blue600,
   infoBg: palette.blue100,
 
   overlay: 'rgba(2, 6, 23, 0.5)',

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image } from 'expo-image';
+import Feather from '@expo/vector-icons/Feather';
 import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import type { RouteProp } from '@react-navigation/native';
@@ -13,6 +14,7 @@ import { Button, Card, Text } from '../components';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
 import { space } from '../theme/spacing';
+import { fontFamily, fontSize } from '../theme/typography';
 import { ROOM_CONDITIONS, type InspectionRoomDraft, type PhotoRecord, type RoomCondition } from '../types/domain';
 
 type InspectionFormParams = { propertyId: string; inspectionLocalId: string };
@@ -28,6 +30,13 @@ const CONDITION_LABEL: Record<RoomCondition, string> = {
   needs_repair: 'Needs repair',
 };
 
+const CONDITION_ICON: Record<RoomCondition, keyof typeof Feather.glyphMap> = {
+  good: 'check-circle',
+  fair: 'alert-circle',
+  poor: 'alert-triangle',
+  needs_repair: 'tool',
+};
+
 function RoomCard({
   room,
   onChange,
@@ -41,9 +50,14 @@ function RoomCard({
 }) {
   return (
     <Card style={styles.roomCard}>
-      <Text size="base" weight="semibold">
-        {room.roomLabel}
-      </Text>
+      <View style={styles.roomHeader}>
+        <Text size="base" weight="semibold">
+          {room.roomLabel}
+        </Text>
+        {room.condition ? (
+          <Feather name={CONDITION_ICON[room.condition]} size={18} color={colors.primary} />
+        ) : null}
+      </View>
 
       <View style={styles.conditionRow}>
         {ROOM_CONDITIONS.map((c) => (
@@ -60,14 +74,28 @@ function RoomCard({
 
       <NotesInput value={room.notes} onChange={(notes) => onChange({ ...room, notes })} />
 
-      <View style={styles.photoRow}>
-        {photos.map((p) => (
-          <Image key={p.localId} source={{ uri: p.localUri }} style={styles.thumbnail} contentFit="cover" />
-        ))}
-      </View>
+      {photos.length > 0 ? (
+        <View style={styles.photoRow}>
+          {photos.map((p) => (
+            <Image key={p.localId} source={{ uri: p.localUri }} style={styles.thumbnail} contentFit="cover" />
+          ))}
+        </View>
+      ) : null}
       <View style={styles.photoActions}>
-        <Button label="Take photo" size="sm" variant="outline" onPress={() => onAddPhoto('camera')} style={styles.photoActionButton} />
-        <Button label="Choose photo" size="sm" variant="ghost" onPress={() => onAddPhoto('library')} style={styles.photoActionButton} />
+        <Button
+          label="Take photo"
+          size="sm"
+          variant="outline"
+          onPress={() => onAddPhoto('camera')}
+          style={styles.photoActionButton}
+        />
+        <Button
+          label="Choose photo"
+          size="sm"
+          variant="ghost"
+          onPress={() => onAddPhoto('library')}
+          style={styles.photoActionButton}
+        />
       </View>
     </Card>
   );
@@ -194,9 +222,12 @@ export default function InspectionFormScreen({ route, navigation }: Props) {
       ))}
 
       {validationError ? (
-        <Text size="sm" color="error" style={styles.validationError}>
-          {validationError}
-        </Text>
+        <View style={styles.validationCard}>
+          <Feather name="alert-circle" size={16} color={colors.error} />
+          <Text size="sm" color="error" style={styles.validationText}>
+            {validationError}
+          </Text>
+        </View>
       ) : null}
 
       <Button label="Complete inspection" onPress={handleComplete} loading={completing} style={styles.completeButton} />
@@ -220,6 +251,11 @@ const styles = StyleSheet.create({
     marginBottom: space.md,
     gap: space.sm,
   },
+  roomHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   conditionRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -231,9 +267,11 @@ const styles = StyleSheet.create({
   plainInput: {
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: radius.md,
-    paddingHorizontal: space.sm,
-    paddingVertical: space.xs,
+    borderRadius: radius.lg,
+    paddingHorizontal: space.md,
+    paddingVertical: space.sm,
+    fontFamily: fontFamily.sans,
+    fontSize: fontSize.base.fontSize,
     color: colors.text,
     textAlignVertical: 'top',
     minHeight: 48,
@@ -244,9 +282,9 @@ const styles = StyleSheet.create({
     gap: space.xs,
   },
   thumbnail: {
-    width: 56,
-    height: 56,
-    borderRadius: radius.sm,
+    width: 64,
+    height: 64,
+    borderRadius: radius.md,
     backgroundColor: colors.borderMuted,
   },
   photoActions: {
@@ -256,8 +294,17 @@ const styles = StyleSheet.create({
   photoActionButton: {
     flex: 1,
   },
-  validationError: {
+  validationCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs,
+    backgroundColor: colors.errorBg,
+    borderRadius: radius.lg,
+    padding: space.sm,
     marginBottom: space.sm,
+  },
+  validationText: {
+    flex: 1,
   },
   completeButton: {
     marginTop: space.sm,

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { Image } from 'expo-image';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { useLoginMutation } from '../api/apiSlice';
 import * as tokenStore from '../auth/tokenStore';
 import { setAuthenticated } from '../auth/authSlice';
 import { useAppDispatch } from '../store/hooks';
-import { Button, Input, Text } from '../components';
+import { Button, Card, Input, Text } from '../components';
 import { colors } from '../theme/colors';
+import { radius } from '../theme/radius';
 import { space } from '../theme/spacing';
 
 export default function LoginScreen() {
@@ -44,48 +46,50 @@ export default function LoginScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.screen}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
+    <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.content}>
-        <Text size="3xl" weight="bold" style={styles.title}>
-          Nyumban
-        </Text>
-        <Text size="base" color="textMuted" style={styles.subtitle}>
-          Sign in to start your field inspections.
-        </Text>
-
-        <Input
-          label="Email"
-          value={email}
-          onChangeText={setEmail}
-          placeholder="agent@nyumban.test"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          autoComplete="email"
-        />
-        <Input
-          label="Password"
-          value={password}
-          onChangeText={setPassword}
-          placeholder="********"
-          secureTextEntry
-          autoCapitalize="none"
-        />
-
-        {formError ? (
-          <Text size="sm" color="error" style={styles.error}>
-            {formError}
+        <View style={styles.brand}>
+          <Image source={require('../../assets/icon.png')} style={styles.logo} contentFit="cover" />
+          <Text size="3xl" weight="extrabold" style={styles.title}>
+            Nyumban
           </Text>
-        ) : null}
+          <Text size="base" color="textMuted" style={styles.subtitle}>
+            Sign in to start your field inspections.
+          </Text>
+        </View>
 
-        <Button
-          label={isLoading ? 'Signing in…' : 'Sign in'}
-          onPress={handleSubmit}
-          loading={isLoading}
-          style={styles.submit}
-        />
+        <Card style={styles.formCard}>
+          <Input
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            placeholder="agent@nyumban.test"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            autoComplete="email"
+          />
+          <Input
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            placeholder="********"
+            secureTextEntry
+            autoCapitalize="none"
+          />
+
+          {formError ? (
+            <Text size="sm" color="error" style={styles.error}>
+              {formError}
+            </Text>
+          ) : null}
+
+          <Button
+            label={isLoading ? 'Signing in…' : 'Sign in'}
+            onPress={handleSubmit}
+            loading={isLoading}
+            style={styles.submit}
+          />
+        </Card>
       </View>
     </KeyboardAvoidingView>
   );
@@ -101,11 +105,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: space.lg,
   },
+  brand: {
+    alignItems: 'center',
+    marginBottom: space.xl,
+  },
+  logo: {
+    width: 72,
+    height: 72,
+    borderRadius: radius.xl,
+    marginBottom: space.md,
+  },
   title: {
+    color: colors.secondary,
     marginBottom: space.xs,
   },
   subtitle: {
-    marginBottom: space.xl,
+    textAlign: 'center',
+  },
+  formCard: {
+    gap: 0,
   },
   error: {
     marginBottom: space.sm,

@@ -3,6 +3,7 @@ import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
 import { space } from '../theme/spacing';
+import { shadows } from '../theme/shadows';
 import { fontFamily, fontSize } from '../theme/typography';
 import { Text } from './Text';
 
@@ -20,12 +21,17 @@ export function Input({ label, error, helperText, style, onFocus, onBlur, ...res
   return (
     <View style={styles.container}>
       {label ? (
-        <Text size="sm" weight="medium" style={styles.label}>
+        <Text size="sm" weight="medium" color="textMuted" style={styles.label}>
           {label}
         </Text>
       ) : null}
       <TextInput
-        style={[styles.input, { borderColor }, style]}
+        style={[
+          styles.input,
+          { borderColor, borderWidth: focused ? 1.5 : 1 },
+          focused ? styles.inputFocused : null,
+          style,
+        ]}
         placeholderTextColor={colors.textMuted}
         onFocus={(e) => {
           setFocused(true);
@@ -58,14 +64,16 @@ const styles = StyleSheet.create({
     marginBottom: space.xs,
   },
   input: {
-    borderWidth: 1,
-    borderRadius: radius.md,
-    paddingVertical: space.sm,
+    borderRadius: radius.lg,
+    paddingVertical: space.sm + 2,
     paddingHorizontal: space.md,
     fontFamily: fontFamily.sans,
     fontSize: fontSize.base.fontSize,
     color: colors.text,
     backgroundColor: colors.surface,
+  },
+  inputFocused: {
+    ...shadows.sm,
   },
   helper: {
     marginTop: space.xs,

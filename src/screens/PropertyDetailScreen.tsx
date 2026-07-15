@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import Feather from '@expo/vector-icons/Feather';
 import * as Crypto from 'expo-crypto';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { PropertiesStackParamList } from '../navigation/types';
@@ -98,14 +99,20 @@ export default function PropertyDetailScreen({ route, navigation }: Props) {
       </View>
 
       <Card style={styles.card}>
-        <Text size="sm" color="textMuted">
-          {property.unitCount != null ? `${property.unitCount} units` : 'Unit count not on file'}
-        </Text>
-        <Text size="sm" color="textMuted">
-          {property.lastInspectedAt
-            ? `Last inspected ${new Date(property.lastInspectedAt).toLocaleDateString()}`
-            : 'Never inspected'}
-        </Text>
+        <View style={styles.statRow}>
+          <Feather name="grid" size={16} color={colors.textMuted} />
+          <Text size="sm" color="textMuted">
+            {property.unitCount != null ? `${property.unitCount} units` : 'Unit count not on file'}
+          </Text>
+        </View>
+        <View style={styles.statRow}>
+          <Feather name="clock" size={16} color={colors.textMuted} />
+          <Text size="sm" color="textMuted">
+            {property.lastInspectedAt
+              ? `Last inspected ${new Date(property.lastInspectedAt).toLocaleDateString()}`
+              : 'Never inspected'}
+          </Text>
+        </View>
       </Card>
 
       <Text size="lg" weight="semibold" style={styles.sectionTitle}>
@@ -120,8 +127,8 @@ export default function PropertyDetailScreen({ route, navigation }: Props) {
         </Card>
       ) : (
         <Card style={styles.card}>
-          {rooms.map((room) => (
-            <View key={room.id} style={styles.roomRow}>
+          {rooms.map((room, index) => (
+            <View key={room.id} style={[styles.roomRow, index === rooms.length - 1 && styles.roomRowLast]}>
               <Text size="sm">{room.label}</Text>
               <Text size="xs" color="textMuted">
                 Floor {room.floor}
@@ -167,6 +174,11 @@ const styles = StyleSheet.create({
   },
   card: {
     marginBottom: space.md,
+    gap: space.sm,
+  },
+  statRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: space.xs,
   },
   sectionTitle: {
@@ -175,7 +187,13 @@ const styles = StyleSheet.create({
   roomRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: space.xs,
+    paddingVertical: space.xs + 2,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderMuted,
+  },
+  roomRowLast: {
+    borderBottomWidth: 0,
+    paddingBottom: 0,
   },
   draftStatus: {
     marginBottom: space.sm,

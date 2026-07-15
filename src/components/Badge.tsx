@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   base: {
     alignSelf: 'flex-start',
     borderRadius: radius.full,
-    paddingVertical: space.xs / 2,
-    paddingHorizontal: space.sm,
+    paddingVertical: space.xs * 0.75,
+    paddingHorizontal: space.sm + 2,
   },
 });

@@ -11,10 +11,7 @@ export type CardProps = ViewProps & {
 
 export function Card({ bordered = false, style, children, ...rest }: CardProps) {
   return (
-    <View
-      style={[styles.base, bordered ? styles.bordered : shadows.md, style]}
-      {...rest}
-    >
+    <View style={[styles.base, bordered ? styles.bordered : shadows.sm, style]} {...rest}>
       {children}
     </View>
   );
@@ -23,7 +20,7 @@ export function Card({ bordered = false, style, children, ...rest }: CardProps) 
 const styles = StyleSheet.create({
   base: {
     backgroundColor: colors.surface,
-    borderRadius: radius.lg,
+    borderRadius: radius.xl,
     padding: space.md,
   },
   bordered: {

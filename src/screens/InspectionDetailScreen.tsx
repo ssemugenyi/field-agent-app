@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import Feather from '@expo/vector-icons/Feather';
 import { useFocusEffect } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { InspectionsStackParamList } from '../navigation/types';
@@ -63,9 +64,12 @@ export default function InspectionDetailScreen({ route, navigation }: Props) {
 
       {needsAttention && draft.errorMessage ? (
         <Card bordered style={styles.errorCard}>
-          <Text size="sm" weight="semibold" color="error">
-            What happened
-          </Text>
+          <View style={styles.errorHeader}>
+            <Feather name="alert-triangle" size={16} color={colors.warning} />
+            <Text size="sm" weight="semibold" color="error">
+              What happened
+            </Text>
+          </View>
           <Text size="sm" color="textMuted">
             {draft.errorMessage}
           </Text>
@@ -76,8 +80,8 @@ export default function InspectionDetailScreen({ route, navigation }: Props) {
         Rooms
       </Text>
       <Card style={styles.card}>
-        {draft.rooms.map((room) => (
-          <View key={room.roomId} style={styles.roomRow}>
+        {draft.rooms.map((room, index) => (
+          <View key={room.roomId} style={[styles.roomRow, index === draft.rooms.length - 1 && styles.roomRowLast]}>
             <Text size="sm" weight="medium">
               {room.roomLabel}
             </Text>
@@ -127,14 +131,26 @@ const styles = StyleSheet.create({
   errorCard: {
     gap: space.xs,
   },
+  errorHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs,
+  },
   sectionTitle: {
     marginTop: space.sm,
   },
   card: {
-    gap: space.sm,
+    gap: 0,
   },
   roomRow: {
     gap: 2,
+    paddingVertical: space.xs + 2,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderMuted,
+  },
+  roomRowLast: {
+    borderBottomWidth: 0,
+    paddingBottom: 0,
   },
   actionButton: {
     marginTop: space.md,
