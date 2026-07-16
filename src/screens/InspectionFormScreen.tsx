@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image } from 'expo-image';
 import Feather from '@expo/vector-icons/Feather';
-import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import type { RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -206,32 +206,34 @@ export default function InspectionFormScreen({ route, navigation }: Props) {
   }
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text size="lg" weight="semibold" style={styles.header}>
-        {propertyName}
-      </Text>
+    <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        <Text size="lg" weight="semibold" style={styles.header}>
+          {propertyName}
+        </Text>
 
-      {rooms.map((room, index) => (
-        <RoomCard
-          key={room.roomId}
-          room={room}
-          photos={photosByRoom[room.roomId] ?? []}
-          onChange={(next) => updateRoom(index, next)}
-          onAddPhoto={(source) => handleAddPhoto(room.roomId, source)}
-        />
-      ))}
+        {rooms.map((room, index) => (
+          <RoomCard
+            key={room.roomId}
+            room={room}
+            photos={photosByRoom[room.roomId] ?? []}
+            onChange={(next) => updateRoom(index, next)}
+            onAddPhoto={(source) => handleAddPhoto(room.roomId, source)}
+          />
+        ))}
 
-      {validationError ? (
-        <View style={styles.validationCard}>
-          <Feather name="alert-circle" size={16} color={colors.error} />
-          <Text size="sm" color="error" style={styles.validationText}>
-            {validationError}
-          </Text>
-        </View>
-      ) : null}
+        {validationError ? (
+          <View style={styles.validationCard}>
+            <Feather name="alert-circle" size={16} color={colors.error} />
+            <Text size="sm" color="error" style={styles.validationText}>
+              {validationError}
+            </Text>
+          </View>
+        ) : null}
 
-      <Button label="Complete inspection" onPress={handleComplete} loading={completing} style={styles.completeButton} />
-    </ScrollView>
+        <Button label="Complete inspection" onPress={handleComplete} loading={completing} style={styles.completeButton} />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

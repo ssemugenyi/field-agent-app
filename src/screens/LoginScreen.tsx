@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Image } from 'expo-image';
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { useLoginMutation } from '../api/apiSlice';
 import * as tokenStore from '../auth/tokenStore';
 import { setAuthenticated } from '../auth/authSlice';
@@ -46,7 +46,11 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <View style={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.brand}>
           <Image source={require('../../assets/images/nyumban-logo.png')} style={styles.logo} contentFit="contain" />
           <Text size="3xl" weight="extrabold" style={styles.title}>
@@ -89,7 +93,7 @@ export default function LoginScreen() {
             style={styles.submit}
           />
         </Card>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -100,9 +104,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   content: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     paddingHorizontal: space.lg,
+    paddingVertical: space.xl,
   },
   brand: {
     alignItems: 'center',
